@@ -1,0 +1,74 @@
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.text {
+  color: #333;
+  font-size: 16px;
+  font-family: "SF UI Display";
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  letter-spacing: 4px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.secondText {
+  color: #000;
+  font-size: 16px;
+  font-family: "SF UI Display";
+  font-style: normal;
+  font-weight: 300;
+  line-height: 16px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.iconContainer {
+  padding: 8px 48px;
+  gap: 6.275px;
+  border-radius: 16px;
+  background: #333;
+}
+
+.icon {
+  width: 23.843px;
+  height: 23.843px;
+  color: rgb(255, 255, 255);
+}
+
+/* professional text style  */
+.pbg {
+  background-image: url("../img/Circle_8.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+/* panoroma */
+.cardholder {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+  /* transform:translateX(512px) translateZ(591px); */
+
+}
+.curved1 {
+  transform: rotateY(
+    18deg
+  ); /* Adjust the translateZ value to control the depth */
+}
+
+.curved2 {
+  transform: rotateY(10deg);
+}
+.curved3 {
+  transform: rotateY(-8deg);
+}
+.curved4 {
+  transform: rotateY(-15deg);
+}
+
+
