@@ -1,6 +1,6 @@
 import {
+  Box,
   Button,
-  Container,
   Grid,
   IconButton,
   InputBase,
@@ -16,9 +16,27 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const SecondSection = () => {
-  
   return (
-    <Container sx={{ display: "flex", flexDirection: "column", alignItems: "center" ,mt:5,mb:5}}>
+    <Box
+    sx={{
+      flexGrow: 1,
+      mt: 5,
+      textAlign: "center",
+      fontFamily: "SF UI Display",
+      mb:5
+    }}
+  >
+    {/* 1st section  */}
+    <Grid
+      container
+      spacing={{ xs: 2, md: 3 }}
+      columns={{ xs: 4, sm: 8, md: 12 }}
+      justifyContent="center"
+      alignItems="center"
+    >
+      <Grid item  md={4}>
+      </Grid>
+      <Grid item xs={12} sm={6} md={4} >
       <Paper
         component="form"
         sx={{
@@ -40,9 +58,19 @@ const SecondSection = () => {
         </IconButton>
         <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search for the professional you need" />
       </Paper>
-      <Grid container spacing={2}>
-        {/* First Grid */}
-        <Grid item xs={12} sm={6} md={3} sx={{ display: "flex", justifyContent: "center" }}>
+      </Grid>
+      <Grid item  md={4} >
+      </Grid>
+    </Grid>
+    {/* 2nd section  */}
+    <Grid
+      container
+      spacing={{ xs: 2, md: 3 }}
+      columns={{ xs: 4, sm: 12, md: 12 }}
+      justifyContent="center"
+      alignItems="center"
+    >
+      <Grid item xs={12} sm={6} md={4} sx={{ display: "flex", justifyContent: "center" }}>
           <Typography
             sx={{
               color: "#000",
@@ -53,6 +81,7 @@ const SecondSection = () => {
               marginRight: 2,
             }}
           >
+          
             Your location
           </Typography>
           <img
@@ -61,10 +90,18 @@ const SecondSection = () => {
             style={{ width: "114px", height: "60.25px", marginTop: "-4%" }}
           />
         </Grid>
+  
 
-        {/* Second Grid */}
-        <Grid item xs={12} sm={6} md={6} sx={{ display: "flex", justifyContent: "center" }}>
-          <Paper
+      <Grid
+        item
+        xs={12}
+        md={4}
+        sx={{
+          display: { xs: "block", md: "flex" },
+          justifyContent: "space-between",
+        }}
+      >
+         <Paper
             component="form"
             sx={{
               display: "flex",
@@ -84,7 +121,6 @@ const SecondSection = () => {
             </IconButton>
             <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search by location" />
           </Paper>
-
           <Button
             variant="contained"
             sx={{
@@ -105,11 +141,11 @@ const SecondSection = () => {
             Sign In
             <ArrowForwardIosIcon />
           </Button>
-        </Grid>
 
-        {/* Third Grid */}
-        <Grid item xs={12} sm={6} md={3} sx={{ display: "flex", justifyContent: "center" }}>
-          <img src={img2} alt="Image" style={{ width: "114px", height: "60.25px" }} />
+      </Grid>
+
+      <Grid item md={4}  sx={{ display: "flex", justifyContent: "center" }}>
+      <img src={img2} alt="Image" style={{ width: "114px", height: "60.25px" }} />
           <Typography
             sx={{
               color: "#000",
@@ -118,14 +154,16 @@ const SecondSection = () => {
               fontStyle: "normal",
               fontWeight: 400,
               lineHeight: "16px",
-              marginTop: "30%",
+              marginTop: "15%",
             }}
           >
             Search Radius
           </Typography>
-        </Grid>
       </Grid>
-    </Container>
+    </Grid>
+
+  </Box>
+  
   );
 };
 

@@ -119,7 +119,7 @@ const ProfessionalReg2 = () => {
         </Card>
       </Box>
       </Grid>
-      <Grid item xs={12} md={3}>
+      <Grid item xs={12} md={3}  sx={{mt:5}}>
           <img src={pic3} alt="Logo" style={logoStyle} />
         </Grid>
       </Grid>

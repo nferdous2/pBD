@@ -48,7 +48,7 @@ const FileUpload = ({ label, value, onChange, accept }) => {
         sx={{
           width: "80%",
           ml: "10%",
-          background: "blue",
+          background: "#1F51FF",
           color: "white",
           fontWeight: "bold",
         }}
@@ -65,8 +65,8 @@ const ProfessionalReg = () => {
     // Handle form submission logic here
   };
   const logoStyle = {
-    width: "80%",
-    height: "50%",
+    // width: "50%",
+    // height: "50%",
   };
   return (
     <Box
@@ -85,7 +85,7 @@ const ProfessionalReg = () => {
         alignItems="center"
         sx={{ mb: 5 }}
       >
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={3} sx={{mt:5}}>
           <img src={pic1} alt="Logo" style={logoStyle} />
         </Grid>
         <Grid item xs={12} md={6}>
@@ -167,8 +167,8 @@ const ProfessionalReg = () => {
                       accept="application/pdf"
                     />
                   </Grid>
-                  <Grid item xs={12}>
-                    <FileUpload
+                  <Grid item xs={12} >
+                    <FileUpload  
                       label="Upload Certificate (PDF)"
                       // value={pdf}
                       // onChange={handlePdfChange}
@@ -192,7 +192,7 @@ const ProfessionalReg = () => {
             </Card>
           </Container>
         </Grid>
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} md={3} sx={{marginTop:"9%"}}>
           <img src={pic3} alt="Logo" style={logoStyle} />
         </Grid>
       </Grid>
