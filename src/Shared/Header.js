@@ -88,9 +88,16 @@ function Header() {
               <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>
                 Pricing
               </MenuItem>
+              <NavLink to="/dashboard"   style={{
+                  textDecoration: "none",
+                  color: "rgba(51, 51, 51, 0.50)",
+                  fontWeight: "bold",
+                }}>
               <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>
                 Dashboard
               </MenuItem>
+              </NavLink>
+             
               <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>
                 Contact us
               </MenuItem>
@@ -139,14 +146,20 @@ function Header() {
                 fontWeight: "bold",
               }}
             >
-              <MenuItem>Home</MenuItem>
+             <MenuItem>Home</MenuItem>
             </NavLink>
             <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>
               Pricing
             </MenuItem>
-            <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>
-              Dashboard
-            </MenuItem>
+            <NavLink to="/dashboard"   style={{
+                  textDecoration: "none",
+                  color: "rgba(51, 51, 51, 0.50)",
+                  fontWeight: "bold",
+                }}>
+              <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>
+                Dashboard
+              </MenuItem>
+              </NavLink>
             <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>
               Contact us
             </MenuItem>

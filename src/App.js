@@ -10,6 +10,7 @@ import ProfessionalReg from './Components/Pages/Authentication/ProfessionalReg';
 import ProfessionalReg2 from './Components/Pages/Authentication/ProfessionalReg2';
 import ForgetPass from './Components/Pages/Authentication/ForgetPass';
 import SetNewPass from './Components/Pages/Authentication/SetNewPass';
+import Dashboard from './Components/Pages/Dashboard/Dashboard';
 
 
 function App() {
@@ -50,6 +51,10 @@ function App() {
       {
         path: "optn",
         element:<RegOptions/>,
+      },
+      {
+        path: "dashboard",
+        element:<Dashboard/>,
       },
     ]
 
