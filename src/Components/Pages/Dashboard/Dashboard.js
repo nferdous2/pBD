@@ -15,22 +15,19 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { NavLink } from "react-router-dom";
-import { FaUser} from "react-icons/fa";
-import {  FcHome } from "react-icons/fc";
-import { Outlet } from "react-router-dom";
+import { NavLink, Route, Routes } from "react-router-dom";
+import { FaUser } from "react-icons/fa";
+import { FcHome } from "react-icons/fc";
 import { Container } from "@mui/material";
-import {GrUserSettings} from "react-icons/gr";
-import {AiOutlineMessage} from "react-icons/ai"
-import {
-  BsPersonLinesFill,
-  BsBookmarkDash
-} from "react-icons/bs";
+import { GrUserSettings } from "react-icons/gr";
+import { AiOutlineMessage } from "react-icons/ai";
+import { BsPersonLinesFill, BsBookmarkDash } from "react-icons/bs";
 
 import TreeView from "@mui/lab/TreeView";
 import TreeItem from "@mui/lab/TreeItem";
 
 import LoginIcon from "@mui/icons-material/Login";
+import Profile from "./Profile";
 
 const drawerWidth = 240;
 
@@ -78,7 +75,15 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   ...theme.mixins.toolbar,
   justifyContent: "flex-end",
 }));
-
+const SvgBackground = styled("svg")({
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  zIndex: -1,
+  transform: "rotate(360deg)",
+});
 export default function Dashboard() {
   const [open, setOpen] = React.useState(true);
 
@@ -89,11 +94,17 @@ export default function Dashboard() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  // User login check
-  // const {user} = useAuth();
+
+  // State to manage which component to render dynamically
+  const [selectedComponent, setSelectedComponent] = React.useState(null);
+
+  // Handler to render the Profile component
+  const handleProfileClick = () => {
+    setSelectedComponent(<Profile />);
+  };
 
   return (
-    <Box sx={{ display: "flex", background: "#F6F6F6" }}>
+    <Box sx={{ display: "flex", }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar style={{ background: "#fff", color: "#000" }}>
@@ -150,7 +161,6 @@ export default function Dashboard() {
             >
               <span style={{ color: "#FFB800" }}>Pro</span>fessionalBD
             </Typography>
-          
           </Toolbar>
           <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
@@ -213,24 +223,20 @@ export default function Dashboard() {
               label="User"
               style={{ color: "#000", background: "#FFFFFF" }}
             >
-              <NavLink
-                to="/profile"
-                style={{ textDecoration: "none", width: "100%", color: "#000" }}
-              >
-                <ListItem disablePadding>
-                  <ListItemButton style={{ borderRadius: "0 40px 40px 0" }}>
-                    <ListItemIcon>
-                    <BsPersonLinesFill                        style={{ color: "#000", fontSize: "1.3rem" }}
-                      />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Profile"
-                      style={{ marginLeft: "-1rem" }}
+              <ListItem disablePadding>
+                <ListItemButton
+                  style={{ borderRadius: "0 40px 40px 0" }}
+                  onClick={handleProfileClick} // Handle click to render Profile dynamically
+                >
+                  <ListItemIcon>
+                    <BsPersonLinesFill
+                      style={{ color: "#000", fontSize: "1.3rem" }}
                     />
-                  </ListItemButton>
-                </ListItem>
-              </NavLink>
-            
+                  </ListItemIcon>
+                  <ListItemText primary="Profile" style={{ marginLeft: "-1rem" }} />
+                </ListItemButton>
+              </ListItem>
+
               <NavLink
                 to="/settings"
                 style={{ textDecoration: "none", width: "100%", color: "#000" }}
@@ -269,7 +275,7 @@ export default function Dashboard() {
                 </ListItem>
               </NavLink>
               <NavLink
-                to="/updateDoctor"
+                to="/msg"
                 style={{ textDecoration: "none", width: "100%", color: "#000" }}
               >
                 <ListItem disablePadding>
@@ -307,9 +313,33 @@ export default function Dashboard() {
       <Main open={open}>
         <DrawerHeader />
         <Container maxWidth="lg">
-          <Outlet />
+          <Main open={open}>
+            <DrawerHeader />
+            <Container maxWidth="lg">
+              {/* Render the selected component */}
+              {selectedComponent}
+            </Container>
+          </Main>
         </Container>
       </Main>
+      
+      <SvgBackground
+        viewBox="0 0 1440 320"
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: -1,
+          transform: 'rotate(360deg)', // Rotate the SVG 180 degrees to flip it upside down
+        }}
+      >
+        <path
+          opacity="0.14"
+          d="M1439.06 244.889V54.3183C1425.89 47.2518 1412.31 40.9853 1398.39 35.553C1337.73 12.125 1271.56 7.13626 1207.1 9.13176C1142.65 11.1273 1079.72 20.1646 1018.66 40.9638C958.531 61.4561 902.081 91.3118 848.337 124.928C796.531 157.374 743.535 189.725 682.691 201.678C622.673 213.536 563.499 201.678 509.486 173.972C420.878 128.516 354.374 45.4153 258.705 12.7966C205.882 -5.1821 147.821 -2.70692 94.2106 10.8778C66.5998 18.0348 33.9619 29.1827 13.4313 49.8476C8.39558 55.022 3.89564 60.6919 0 66.771L0 244.889H1439.06Z" fill="#0D6EFD"
+        />
+      </SvgBackground>
     </Box>
   );
 }

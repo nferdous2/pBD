@@ -11,6 +11,7 @@ import ProfessionalReg2 from './Components/Pages/Authentication/ProfessionalReg2
 import ForgetPass from './Components/Pages/Authentication/ForgetPass';
 import SetNewPass from './Components/Pages/Authentication/SetNewPass';
 import Dashboard from './Components/Pages/Dashboard/Dashboard';
+import Profile from './Components/Pages/Dashboard/Profile';
 
 
 function App() {
@@ -55,6 +56,10 @@ function App() {
       {
         path: "dashboard",
         element:<Dashboard/>,
+      },
+      {
+        path: "profile",
+        element:<Profile/>,
       },
     ]
 
