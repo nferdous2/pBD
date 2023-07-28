@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useContext } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -11,8 +11,11 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import LanguageIcon from "@mui/icons-material/Language";
 import { Link, NavLink } from "react-router-dom";
+import { UserContext } from "../Components/Pages/Authentication/UserContext";
 
 function Header() {
+  const { isLoggedIn, handleLogout } = useContext(UserContext);
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -85,22 +88,20 @@ function Header() {
               >
                 <MenuItem>Home</MenuItem>
               </NavLink>
-              <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>
-                Pricing
-              </MenuItem>
-              <NavLink to="/dashboard"   style={{
+              <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>Pricing</MenuItem>
+              <NavLink
+                to="/dashboard"
+                style={{
                   textDecoration: "none",
                   color: "rgba(51, 51, 51, 0.50)",
                   fontWeight: "bold",
-                }}>
-              <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>
-                Dashboard
-              </MenuItem>
+                }}
+              >
+                <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>
+                  Dashboard
+                </MenuItem>
               </NavLink>
-             
-              <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>
-                Contact us
-              </MenuItem>
+              <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>Contact us</MenuItem>
             </Menu>
           </Box>
 
@@ -146,43 +147,56 @@ function Header() {
                 fontWeight: "bold",
               }}
             >
-             <MenuItem>Home</MenuItem>
+              <MenuItem>Home</MenuItem>
             </NavLink>
-            <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>
-              Pricing
-            </MenuItem>
-            <NavLink to="/dashboard"   style={{
-                  textDecoration: "none",
-                  color: "rgba(51, 51, 51, 0.50)",
-                  fontWeight: "bold",
-                }}>
-              <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>
-                Dashboard
-              </MenuItem>
-              </NavLink>
-            <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>
-              Contact us
-            </MenuItem>
-          </Box>
-
-          <Box
-            sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
-          >
+            <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>Pricing</MenuItem>
             <NavLink
-              to="/optn"
+              to="/dashboard"
               style={{
                 textDecoration: "none",
                 color: "rgba(51, 51, 51, 0.50)",
                 fontWeight: "bold",
               }}
             >
-              <MenuItem mr={2}>Create Account</MenuItem>
-            </NavLink>{" "}
-            <Link to ="login">
-            <Button variant="contained" sx={{ ml: 4, borderRadius: "10px" }}>
-              Sign In
-            </Button>
-            </Link>
+              <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>
+                Dashboard
+              </MenuItem>
+            </NavLink>
+            <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>Contact us</MenuItem>
+          </Box>
+
+          <Box
+            sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
+          >
+            {isLoggedIn ? (
+              <>
+                <Button
+                  variant="outlined"
+                  onClick={handleLogout}
+                  sx={{ color: "#0D6EFD", borderColor: "#0D6EFD", mr: 2 }}
+                >
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <NavLink
+                  to="/optn"
+                  style={{
+                    textDecoration: "none",
+                    color: "rgba(51, 51, 51, 0.50)",
+                    fontWeight: "bold",
+                  }}
+                >
+                  <MenuItem mr={2}>Create Account</MenuItem>
+                </NavLink>{" "}
+                <Link to="login">
+                  <Button variant="contained" sx={{ ml: 4, borderRadius: "10px" }}>
+                    Sign In
+                  </Button>
+                </Link>
+              </>
+            )}
           </Box>
         </Toolbar>
       </Container>

@@ -13,23 +13,26 @@ export const UserProvider = ({ children }) => {
     }
   }, []);
 
-  const handleLogout = async () => {
-    const token = localStorage.getItem("token");
-    try {
-      await axios.post("http://localhost:80/logout", null, {
-        headers: { Authorization: token },
-      });
-      localStorage.removeItem("token");
-      setIsLoggedIn(false);
-      window.location.reload();
-      window.location.href = "/";
-    } catch (error) {
-      console.error("Error logging out:", error);
-      alert("Logout failed. Please try again.");
-    }
+  // const handleLogout = async () => {
+  //   try {
+  //     const token = localStorage.getItem("token");
+  //     console.log("Token before logout:", token);
+  
+  //     await axios.post("http://localhost:80/logout");
+  //     localStorage.removeItem("token");
+  //     setIsLoggedIn(false);
+  //     console.log("Logout successful.");
+  //     window.location.href = "/";
+  //   } catch (error) {
+  //     console.error("Error logging out:", error);
+  //     alert("Logout failed. Please try again.");
+  //   }
+  // };
+  
+  
+  const handleLogout = () => {
+    setIsLoggedIn(false);
   };
-
-
   return (
     <UserContext.Provider
       value={{ isLoggedIn, setIsLoggedIn,  handleLogout, }}
