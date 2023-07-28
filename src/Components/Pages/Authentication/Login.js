@@ -1,11 +1,20 @@
-import React from "react";
-import { Box, Button, Card, CardContent, Grid, TextField, Typography } from "@mui/material";
+import React, { useContext, useState } from "react";
+import {
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 import logo from "../../../img/Group 39875.svg";
-import { Link } from "react-router-dom";
-import pic1 from "../../../img/pic1.png";
 import pic2 from "../../../img/pic2.png";
-import pic3 from "../../../img/pic3.png";
 import pic4 from "../../../img/Group 39872.svg";
+import { UserContext } from "./UserContext";
+import axios from "axios";
+import { NavLink } from "react-router-dom";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Login = () => {
   const logoStyle = {
@@ -37,9 +46,53 @@ const Login = () => {
     // width: "150%",
     // height: "100%",
   };
+
+  const { setIsLoggedIn } = useContext(UserContext); // Access the UserContext
+  //HANDELING PASSWORD VISIBILITY
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+  const [showPassword, setShowPassword] = useState(false);
+
+  //FORM DATA HANDLE
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleInputChange = (event) => {
+    setFormData({ ...formData, [event.target.name]: event.target.value });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    axios
+      .post("http://localhost:80/login", formData)
+      .then((res) => {
+        alert(res.data.message);
+        const token = res.data.token;
+        // Store the token in local storage or a cookie
+        localStorage.setItem("token", token);
+        setIsLoggedIn(true);
+        console.log("Token set:", token);
+        // Redirect to the desired page or perform other actions
+        // window.location.href = "/";
+
+        setFormData({
+          name: "",
+          pass: "",
+        });
+      })
+      .catch((err) => {
+        console.error("Error logging in:", err);
+        alert("Login failed. Please check your credentials and try again.");
+      });
+  };
+
   return (
     <div>
-       <svg
+      <svg
         viewBox="0 0 1440 320"
         style={{
           position: "absolute",
@@ -58,114 +111,122 @@ const Login = () => {
           fill="#0D6EFD"
         />
       </svg>
-    <Box
-      sx={{
-        flexGrow: 1,
-        mt: 5,
-        textAlign: "center",
-        fontFamily: "SF UI Display",
-      }}
-    >
-     
-      {/* 1st section  */}
-      <Grid
-        container
-        spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 4, sm: 8, md: 12 }}
-        justifyContent="center"
-        alignItems="center"
-        sx={{ mb: 5 }}
+      <Box
+        sx={{
+          flexGrow: 1,
+          mt: 5,
+          textAlign: "center",
+          fontFamily: "SF UI Display",
+        }}
       >
-        <Grid item xs={false} sm={false} md={5} lg={5}>
-          <img src={logo} alt="Logo" style={logoStyle} />
-        </Grid>
-        <Grid item xs={12} sm={8} md={2} lg={2}>
-          <Typography sx={{ fontWeight: 600, fontSize: 32 }}>
-          Sign in now          </Typography>
-          <Typography
-            variant="p"
-            sx={{
-              mb: 5,
-              color: "#7D848D",
-              fontSize: 19,
-              fontWeight: 500,
-            }}
-          >
-          Please sign in to <br></br>
-continue with this site 
-          </Typography>
-        </Grid>
-        <Grid item xs={false} sm={false} md={5} lg={5}>
-          <img src={logo} alt="Logo" style={logoStyle} />
-        </Grid>
-      </Grid>
-      {/* 2nd section  */}
-      <Grid
-        container
-        spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 4, sm: 12, md: 12 }}
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Grid item md={4}>
-        <img src={pic2} alt="Logo" style={img} />
-
-        </Grid>
-
+        {/* 1st section  */}
         <Grid
-          item
-          xs={12}
-          md={4}
-     
+          container
+          spacing={{ xs: 2, md: 3 }}
+          columns={{ xs: 4, sm: 8, md: 12 }}
+          justifyContent="center"
+          alignItems="center"
+          sx={{ mb: 5 }}
         >
-            <form>
-                  <Grid container spacing={2}>
-                   
-                    <Grid item xs={12}>
-                      <TextField
-                        id="email"
-                        label="Email"
-                        type="email"
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                      />
-                    </Grid>
-                   
-                    <Grid item xs={12}>
-                      <TextField
-                        id="password"
-                        label="Password"
-                        type="password"
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                      />
-                    </Grid>
-                  
-                  </Grid>
-               
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                    fullWidth
-                  >
-                    Sign In
-                  </Button>
-                </form>
-         
+          <Grid item xs={false} sm={false} md={5} lg={5}>
+            <img src={logo} alt="Logo" style={logoStyle} />
+          </Grid>
+          <Grid item xs={12} sm={8} md={2} lg={2}>
+            <Typography sx={{ fontWeight: 600, fontSize: 32 }}>
+              Sign in now{" "}
+            </Typography>
+            <Typography
+              variant="p"
+              sx={{
+                mb: 5,
+                color: "#7D848D",
+                fontSize: 19,
+                fontWeight: 500,
+              }}
+            >
+              Please sign in to <br></br>
+              continue with this site
+            </Typography>
+          </Grid>
+          <Grid item xs={false} sm={false} md={5} lg={5}>
+            <img src={logo} alt="Logo" style={logoStyle} />
+          </Grid>
         </Grid>
+        {/* 2nd section  */}
+        <Grid
+          container
+          spacing={{ xs: 2, md: 3 }}
+          columns={{ xs: 4, sm: 12, md: 12 }}
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Grid item md={4}>
+            <img src={pic2} alt="Logo" style={img} />
+          </Grid>
 
-        <Grid item md={4}>           <img src={pic4} alt="Logo" />
-</Grid>
-      </Grid>
-     
-    </Box>
+          <Grid item xs={12} md={4}>
+            <form onSubmit={handleSubmit}>
+              <TextField
+                sx={{ width: "100%", mb: 1 }}
+                id="standard-basic-1"
+                label="Your mail"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                variant="outlined"
+                required
+              />
+              <TextField
+                sx={{ width: "100%", mb: 1 }}
+                id="standard-basic"
+                label="Your password"
+                name="pass"
+                value={formData.pass}
+                onChange={handleInputChange}
+                variant="outlined"
+                required
+                type={showPassword ? "text" : "password"}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={handleTogglePasswordVisibility}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <NavLink to="/pass">
+                <Button sx={{ width: "100%", background: "#F6FAFD" }}>
+                  Forgot Password?{" "}
+                </Button>
+              </NavLink>
+              <Button
+                sx={{ width: "100%", mb: 1 }}
+                variant="contained"
+                type="submit"
+              >
+                Login
+              </Button>
+
+              <NavLink to="/register">
+                <Button sx={{ width: "100%", background: "#F6FAFD" }}>
+                  For the First time? Go to register
+                </Button>
+              </NavLink>
+            </form>
+          </Grid>
+
+          <Grid item md={4}>
+            {" "}
+            <img src={pic4} alt="Logo" />
+          </Grid>
+        </Grid>
+      </Box>
     </div>
-
   );
 };
 

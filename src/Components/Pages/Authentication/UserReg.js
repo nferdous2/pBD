@@ -7,31 +7,145 @@ import {
   FormControlLabel,
   FormGroup,
   Grid,
+  IconButton,
+  InputAdornment,
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import pic1 from "../../../img/pic1.png";
 import pic3 from "../../../img/pic3.png";
+import { UserContext } from "./UserContext";
+import axios from "axios";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+
 const UserReg = () => {
   const logoStyle = {
     width: "80%",
     // height: "50%",
   };
-  const [state, setState] = useState({});
+  const [state] = useState({});
 
-  const handleChange = (event) => {
-    setState({
-      ...state,
-      [event.target.name]: event.target.checked,
+  const { setIsLoggedIn } = useContext(UserContext); // Access the UserContext
+
+  //handle password vsisibility
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+  const [showPassword, setShowPassword] = useState(false);
+  //form input fields handling
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    pass: "",
+  });
+  const handleInputChange = (event) => {
+    setFormData({ ...formData, [event.target.name]: event.target.value });
+  };
+  //form data submit
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   const { name, email, pass, mobile } = formData;
+  //   if (!name || !email || !pass || !mobile) {
+  //     alert("Please fill in all the required fields.");
+  //     return;
+  //   }
+  //   //password condition
+
+  //   // if (pass.length < 6) {
+  //   //   alert("Password must have at least 6 characters.");
+  //   //   return;
+  //   // }
+
+  //   axios
+  //     .post("http://localhost:80/signup")
+  //     .then((res) => {
+  //       alert(res.data.message);
+
+  //       const token = res.data.token;
+  //       // Store the token in local storage or a cookie
+  //       localStorage.setItem("token", token);
+  //       setIsLoggedIn(true); // Set isLoggedIn to true after successful registration
+  //       // console.log("Token set:", token);
+  //       setFormData({
+  //         name: "",
+  //         email: "",
+  //         mobile: "",
+  //         pass: "",
+  //       });
+  //       window.location.href = "/";
+  //     })
+
+  //     .catch((err) => {
+  //       console.error("Error registering user:", err);
+  //       if (
+  //         err.response &&
+  //         err.response.data &&
+  //         err.response.data.error === "User already exists"
+  //       ) {
+  //         alert("User already exists. Please choose a different email.");
+  //       } else {
+  //         alert("Registration failed. Please try again.");
+  //       }
+  //     });
+  // };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const { name, email, pass, mobile } = formData;
+    if (!name || !email || !pass || !mobile) {
+      alert("Please fill in all the required fields.");
+      return;
+    }
+    // Log the data being sent to the backend
+    console.log("Data sent to backend:", {
+      name: formData.name,
+      mobile: formData.mobile,
+      email: formData.email,
+      pass: formData.pass,
     });
+
+    axios
+      .post("http://localhost:80/signup", {
+        name: formData.name,
+        mobile: formData.mobile,
+        email: formData.email,
+        pass: formData.pass,
+      })
+      .then((res) => {
+        alert(res.data.message);
+        const token = res.data.token;
+        // Store the token in local storage or a cookie
+        localStorage.setItem("token", token);
+        setIsLoggedIn(true); // Set isLoggedIn to true after successful registration
+        // console.log("Token set:", token);
+        setFormData({
+          name: "",
+          email: "",
+          mobile: "",
+          pass: "",
+        });
+        // window.location.href = "/";
+      })
+      .catch((err) => {
+        console.error("Error registering user:", err);
+        if (
+          err.response &&
+          err.response.data &&
+          err.response.data.error === "User already exists"
+        ) {
+          alert("User already exists. Please choose a different email.");
+        } else {
+          alert("Registration failed. Please try again.");
+        }
+      });
   };
 
   const { gilad } = state;
   return (
     <div>
-       <svg
+      <svg
         viewBox="0 0 1440 320"
         style={{
           position: "absolute",
@@ -39,7 +153,7 @@ const UserReg = () => {
           left: 0,
           width: "100%",
           height: "100%",
-          top:"15%",
+          top: "15%",
           zIndex: -1,
           transform: "rotate(360deg)", // Rotate the SVG 180 degrees to flip it upside down
         }}
@@ -50,181 +164,234 @@ const UserReg = () => {
           fill="#0D6EFD"
         />
       </svg>
-    <Box
-      sx={{
-        flexGrow: 1,
-        mt: 5,
-        textAlign: "center",
-        fontFamily: "SF UI Display",
-
-      }}
-    >
-    
-      {/* 1st section  */}
-      <Grid
-        container
-        spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 4, sm: 8, md: 12 }}
-        justifyContent="center"
-        alignItems="center"
-        sx={{ mb: 5 }}
+      <Box
+        sx={{
+          flexGrow: 1,
+          mt: 5,
+          textAlign: "center",
+          fontFamily: "SF UI Display",
+        }}
       >
-        <Grid item md={4} >
-          <img src={pic1} alt="Logo" style={logoStyle} />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Container
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Box sx={{border:"none"}}>
-              <Typography
-                sx={{
-                  fontSize: 32,
-                  fontWeight: 600,
-                  fontFamily: "SF UI Display",
-                }}
-              >
-                Sign Up Now
-              </Typography>
-
-              <Box>
+        {/* 1st section  */}
+        <Grid
+          container
+          spacing={{ xs: 2, md: 3 }}
+          columns={{ xs: 4, sm: 8, md: 12 }}
+          justifyContent="center"
+          alignItems="center"
+          sx={{ mb: 5 }}
+        >
+          <Grid item md={4}>
+            <img src={pic1} alt="Logo" style={logoStyle} />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Container
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Box sx={{ border: "none" }}>
                 <Typography
-                  variant="subtitle1"
-                  color="textSecondary"
-                  align="center"
-                  gutterBottom
-                  sx={{ color: "#7D848D", fontWeight: 500, fontSize: "20" }}
+                  sx={{
+                    fontSize: 32,
+                    fontWeight: 600,
+                    fontFamily: "SF UI Display",
+                  }}
                 >
-                  Please fill the details to <br></br>
-                  create an account{" "}
+                  Sign Up Now
                 </Typography>
-                <form>
-                  <Grid container spacing={2}>
-                    <Grid item xs={6}>
-                      <TextField
-                        id="first-name"
-                        label="First Name"
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                      />
-                    </Grid>
-                    <Grid item xs={6}>
-                      <TextField
-                        id="last-name"
-                        label="Last Name"
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        id="email"
-                        label="Email"
-                        type="email"
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        id="phone"
-                        label="Mobile Number"
-                        type="tel"
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        id="password"
-                        label="Password"
-                        type="password"
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <TextField
-                        id="confirm-password"
-                        label="Confirm Password"
-                        type="password"
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                      />
-                    </Grid>
-                  </Grid>
-                  <Box sx={{ display: "flex" }}>
-                    <FormControl
-                      sx={{ m: 3 }}
-                      component="fieldset"
-                      variant="standard"
-                    >
-                      <FormGroup>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={gilad}
-                              onChange={handleChange}
-                              name="gilad"
-                            />
-                          }
-                          label="I agree with ProfessionalBD Privacy Policy"
-                        />
-                      </FormGroup>
-                      <FormGroup>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={gilad}
-                              onChange={handleChange}
-                              name="gilad"
-                            />
-                          }
-                          label="I agree with the Terms and Conditions"
-                        />
-                      </FormGroup>
-                    </FormControl>
-                  </Box>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                    fullWidth
-                  >
-                    Sign Up
-                  </Button>
-                </form>
-                <Typography variant="body2" align="center" gutterBottom>
-                  Already have an account?{" "}
-                  <Link to="/login">Log In</Link>
-                </Typography>
-              </Box>
-            </Box>
-          </Container>
-        </Grid>
-        <Grid item  md={4}>
-          <img src={pic3} alt="Logo" style={logoStyle} />
-        </Grid>
-      </Grid>
-    </Box>
-    </div>
 
+                <Box>
+                  <Typography
+                    variant="subtitle1"
+                    color="textSecondary"
+                    align="center"
+                    gutterBottom
+                    sx={{ color: "#7D848D", fontWeight: 500, fontSize: "20" }}
+                  >
+                    Please fill the details to <br></br>
+                    create an account{" "}
+                  </Typography>
+                  <form onSubmit={handleSubmit}>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <TextField
+                          label="First Name"
+                          variant="outlined"
+                          margin="normal"
+                          required
+                          onChange={handleInputChange}
+                          fullWidth
+                          id="name-input"
+                          name="name"
+                          value={formData.name}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12}>
+                        <TextField
+                          label="Email"
+                          type="email"
+                          variant="outlined"
+                          margin="normal"
+                          onChange={handleInputChange}
+                          required
+                          fullWidth
+                          id="email-input"
+                          name="email"
+                          value={formData.email}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          label="Mobile Number"
+                          type="tel"
+                          variant="outlined"
+                          margin="normal"
+                          onChange={handleInputChange}
+                          required
+                          fullWidth
+                          id="phone-input"
+                          name="mobile"
+                          value={formData.mobile}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          id="standard-basic"
+                          label="Your password"
+                          name="pass"
+                          value={formData.pass}
+                          onChange={handleInputChange}
+                          variant="outlined"
+                          fullWidth
+                          required
+                          type={showPassword ? "text" : "password"}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton
+                                  onClick={handleTogglePasswordVisibility}
+                                  edge="end"
+                                >
+                                  {showPassword ? (
+                                    <VisibilityOff />
+                                  ) : (
+                                    <Visibility />
+                                  )}
+                                </IconButton>
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                        {/* <TextField
+                id="outlined"
+                label="Your password"
+                name="password"
+                value={formData.pass}
+                onChange={handleInputChange}
+                variant="standard"
+                required
+              
+                type={showPassword ? "text" : "password"}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={handleTogglePasswordVisibility}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              /> */}
+                        {/* <TextField
+                          id="password"
+                          label="Your password"
+                          name="password"
+                          value={formData.pass}
+                          onChange={handleInputChange}
+                          variant="outlined"
+                          required
+                          fullWidth
+                          type={showPassword ? "text" : "password"}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton
+                                  onClick={handleTogglePasswordVisibility}
+                                  edge="end"
+                                >
+                                  {showPassword ? (
+                                    <VisibilityOff />
+                                  ) : (
+                                    <Visibility />
+                                  )}
+                                </IconButton>
+                              </InputAdornment>
+                            ),
+                          }}
+                        /> */}
+                      </Grid>
+                    </Grid>
+                    <Box sx={{ display: "flex" }}>
+                      <FormControl
+                        sx={{ m: 3 }}
+                        component="fieldset"
+                        variant="standard"
+                      >
+                        <FormGroup>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={gilad}
+                                onChange={handleInputChange}
+                                name="gilad"
+                              />
+                            }
+                            label="I agree with ProfessionalBD Privacy Policy"
+                          />
+                        </FormGroup>
+                        <FormGroup>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={gilad}
+                                onChange={handleInputChange}
+                                name="gilad"
+                              />
+                            }
+                            label="I agree with the Terms and Conditions"
+                          />
+                        </FormGroup>
+                      </FormControl>
+                    </Box>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      type="submit"
+                      fullWidth
+                    >
+                      Sign Up
+                    </Button>
+                  </form>
+                  <Typography variant="body2" align="center" gutterBottom>
+                    Already have an account? <Link to="/login">Log In</Link>
+                  </Typography>
+                </Box>
+              </Box>
+            </Container>
+          </Grid>
+          <Grid item md={4}>
+            <img src={pic3} alt="Logo" style={logoStyle} />
+          </Grid>
+        </Grid>
+      </Box>
+    </div>
   );
 };
 

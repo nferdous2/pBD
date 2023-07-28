@@ -2,7 +2,6 @@ import React from "react";
 import {
   Box,
   Button,
-  Card,
   CardContent,
   Container,
   Grid,
@@ -59,10 +58,6 @@ const FileUpload = ({ label, value, onChange, accept }) => {
 };
 
 const ProfessionalReg = () => {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Handle form submission logic here
-  };
   const logoStyle = {
     // width: "50%",
     // height: "50%",
@@ -83,7 +78,7 @@ const ProfessionalReg = () => {
           position: "absolute",
           bottom: 0,
           left: 0,
-          top:"20%",
+          top: "20%",
           width: "100%",
           height: "100%",
           zIndex: -1,
@@ -104,10 +99,10 @@ const ProfessionalReg = () => {
         alignItems="center"
         sx={{ mb: 5 }}
       >
-        <Grid item xs={12} md={4} sx={{ mt: 5 }}>
+        <Grid item xs={12} md={2} sx={{ mt: 5 }}>
           <img src={pic1} alt="Logo" style={logoStyle} />
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={6}>
           <Container
             sx={{
               display: "flex",
@@ -128,7 +123,7 @@ const ProfessionalReg = () => {
                       Please enter your professional information
                     </Typography>
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={6}>
                     <TextField
                       fullWidth
                       id="category"
@@ -141,7 +136,7 @@ const ProfessionalReg = () => {
                       <MenuItem value="category3">Carpenter</MenuItem>
                     </TextField>
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={6}>
                     <TextField
                       fullWidth
                       id="subcategory"
@@ -154,7 +149,7 @@ const ProfessionalReg = () => {
                       <MenuItem value="subcategory3">Computer</MenuItem>
                     </TextField>
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={6}>
                     <TextField
                       fullWidth
                       id="education"
@@ -170,7 +165,7 @@ const ProfessionalReg = () => {
                       <MenuItem value="education6">Graduate</MenuItem>
                     </TextField>
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={6}>
                     <FileUpload
                       label="Upload NID(pdf)"
                       // value={cv}
@@ -203,7 +198,7 @@ const ProfessionalReg = () => {
             </Box>
           </Container>
         </Grid>
-        <Grid item xs={12} md={4} sx={{ marginTop: "9%" }}>
+        <Grid item xs={12} md={2} sx={{ marginTop: "9%" }}>
           <img src={pic3} alt="Logo" style={logoStyle} />
         </Grid>
       </Grid>

@@ -12,6 +12,8 @@ import ForgetPass from './Components/Pages/Authentication/ForgetPass';
 import SetNewPass from './Components/Pages/Authentication/SetNewPass';
 import Dashboard from './Components/Pages/Dashboard/Dashboard';
 import Profile from './Components/Pages/Dashboard/Profile';
+import Terms from './Components/Pages/HomePages/Terms';
+import { UserProvider } from './Components/Pages/Authentication/UserContext';
 
 
 function App() {
@@ -61,16 +63,23 @@ function App() {
         path: "profile",
         element:<Profile/>,
       },
+      {
+        path: "terms",
+        element:<Terms/>,
+      },
     ]
 
   }
     ]);
   return (
-    <div className="App" style={{overflow:"hidden"}}>
+    <UserProvider>
+ <div className="App" style={{overflow:"hidden"}}>
 
-       <RouterProvider router={router}/>
+<RouterProvider router={router}/>
 
-    </div>
+</div>
+    </UserProvider>
+   
   );
 }
 

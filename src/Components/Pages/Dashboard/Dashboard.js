@@ -84,6 +84,15 @@ const SvgBackground = styled("svg")({
   zIndex: -1,
   transform: "rotate(360deg)",
 });
+// const firebaseConfig = {
+//   apiKey:"AIzaSyA8e9b7gub7DBi19I7X4ZUBuMSsTJ5Q3ps",
+//   authDomain:"shebaacademy-e9c5e.firebaseapp.com",
+//   projectId:"shebaacademy-e9c5e",
+//   storageBucket:"shebaacademy-e9c5e.appspot.com",
+//   messagingSenderId:"569712240076",
+//   appId:"1:569712240076:web:ac6487a06b5fa6f73da969",
+//   };
+  
 export default function Dashboard() {
   const [open, setOpen] = React.useState(true);
 
