@@ -15,7 +15,6 @@ import { UserContext } from "../Components/Pages/Authentication/UserContext";
 
 function Header() {
   const { isLoggedIn, handleLogout } = useContext(UserContext);
-
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -88,20 +87,60 @@ function Header() {
               >
                 <MenuItem>Home</MenuItem>
               </NavLink>
-              <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>Pricing</MenuItem>
-              <NavLink
-                to="/dashboard"
-                style={{
-                  textDecoration: "none",
-                  color: "rgba(51, 51, 51, 0.50)",
-                  fontWeight: "bold",
-                }}
-              >
-                <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>
-                  Dashboard
-                </MenuItem>
-              </NavLink>
-              <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>Contact us</MenuItem>
+              <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>
+                Pricing
+              </MenuItem>
+              {isLoggedIn && (
+                <NavLink
+                  to="/dashboard"
+                  style={{
+                    textDecoration: "none",
+                    color: "rgba(51, 51, 51, 0.50)",
+                    fontWeight: "bold",
+                  }}
+                >
+                  <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>
+                    Dashboard
+                  </MenuItem>
+                </NavLink>
+              )}
+              {isLoggedIn ? (
+                <>
+                  <Button
+                    variant="outlined"
+                    onClick={handleLogout}
+                    sx={{ color: "#0D6EFD", borderColor: "#0D6EFD", mr: 2 }}
+                  >
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <NavLink
+                    to="/optn"
+                    style={{
+                      textDecoration: "none",
+                      color: "rgba(51, 51, 51, 0.50)",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    <MenuItem mr={2}>Create Account</MenuItem>
+                  </NavLink>
+                  <NavLink
+                    to="/login"
+                    style={{
+                      textDecoration: "none",
+                      color: "rgba(51, 51, 51, 0.50)",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    <MenuItem mr={2}>Login</MenuItem>
+                  </NavLink>
+                </>
+              )}
+              <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>
+                Contact us
+              </MenuItem>
             </Menu>
           </Box>
 
@@ -149,20 +188,29 @@ function Header() {
             >
               <MenuItem>Home</MenuItem>
             </NavLink>
-            <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>Pricing</MenuItem>
-            <NavLink
-              to="/dashboard"
-              style={{
-                textDecoration: "none",
-                color: "rgba(51, 51, 51, 0.50)",
-                fontWeight: "bold",
-              }}
-            >
-              <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>
-                Dashboard
-              </MenuItem>
-            </NavLink>
-            <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>Contact us</MenuItem>
+            <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>
+              Pricing
+            </MenuItem>
+
+            {/* Conditionally render the "Dashboard" option */}
+            {isLoggedIn && (
+              <NavLink
+                to="/dashboard"
+                style={{
+                  textDecoration: "none",
+                  color: "rgba(51, 51, 51, 0.50)",
+                  fontWeight: "bold",
+                }}
+              >
+                <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>
+                  Dashboard
+                </MenuItem>
+              </NavLink>
+            )}
+
+            <MenuItem sx={{ color: "rgba(51, 51, 51, 0.50)" }}>
+              Contact us
+            </MenuItem>
           </Box>
 
           <Box
@@ -191,7 +239,10 @@ function Header() {
                   <MenuItem mr={2}>Create Account</MenuItem>
                 </NavLink>{" "}
                 <Link to="login">
-                  <Button variant="contained" sx={{ ml: 4, borderRadius: "10px" }}>
+                  <Button
+                    variant="contained"
+                    sx={{ ml: 4, borderRadius: "10px" }}
+                  >
                     Sign In
                   </Button>
                 </Link>

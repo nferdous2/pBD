@@ -28,6 +28,7 @@ import TreeItem from "@mui/lab/TreeItem";
 
 import LoginIcon from "@mui/icons-material/Login";
 import Profile from "./Profile";
+import { UserContext } from "../Authentication/UserContext";
 
 const drawerWidth = 240;
 
@@ -84,17 +85,10 @@ const SvgBackground = styled("svg")({
   zIndex: -1,
   transform: "rotate(360deg)",
 });
-// const firebaseConfig = {
-//   apiKey:"AIzaSyA8e9b7gub7DBi19I7X4ZUBuMSsTJ5Q3ps",
-//   authDomain:"shebaacademy-e9c5e.firebaseapp.com",
-//   projectId:"shebaacademy-e9c5e",
-//   storageBucket:"shebaacademy-e9c5e.appspot.com",
-//   messagingSenderId:"569712240076",
-//   appId:"1:569712240076:web:ac6487a06b5fa6f73da969",
-//   };
-  
+
 export default function Dashboard() {
   const [open, setOpen] = React.useState(true);
+  const { isLoggedIn, handleLogout } = React.useContext(UserContext);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -113,7 +107,7 @@ export default function Dashboard() {
   };
 
   return (
-    <Box sx={{ display: "flex", }}>
+    <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar style={{ background: "#fff", color: "#000" }}>
@@ -242,7 +236,10 @@ export default function Dashboard() {
                       style={{ color: "#000", fontSize: "1.3rem" }}
                     />
                   </ListItemIcon>
-                  <ListItemText primary="Profile" style={{ marginLeft: "-1rem" }} />
+                  <ListItemText
+                    primary="Profile"
+                    style={{ marginLeft: "-1rem" }}
+                  />
                 </ListItemButton>
               </ListItem>
 
@@ -303,20 +300,44 @@ export default function Dashboard() {
               </NavLink>
             </TreeItem>
           </TreeView>
-          {/* login or logout  */}
-          <NavLink
-            to="/login"
-            style={{ textDecoration: "none", width: "100%", color: "#000" }}
-          >
-            <ListItem disablePadding>
-              <ListItemButton style={{ borderRadius: "0 40px 40px 0" }}>
-                <ListItemIcon>
-                  <LoginIcon style={{ color: "#000", fontSize: "1.5rem" }} />
-                </ListItemIcon>
-                <ListItemText primary="Login" />
-              </ListItemButton>
-            </ListItem>
-          </NavLink>
+          {isLoggedIn ? (
+            <>
+              {/* login or logout  */}
+              <NavLink
+                    onClick={handleLogout}
+                style={{ textDecoration: "none", width: "100%", color: "#000" }}
+              >
+                <ListItem>
+                  <ListItemButton style={{ borderRadius: "0 40px 40px 0" }}>
+                    <ListItemIcon>
+                      <LoginIcon
+                        style={{ color: "#000", fontSize: "1.5rem" }}
+                      />
+                    </ListItemIcon>
+                    <ListItemText primary="Logout" />
+                  </ListItemButton>
+                </ListItem>
+              </NavLink>
+            </>
+          ) : (
+            <>
+              <NavLink
+                to="/login"
+                style={{ textDecoration: "none", width: "100%", color: "#000" }}
+              >
+                <ListItem>
+                  <ListItemButton style={{ borderRadius: "0 40px 40px 0" }}>
+                    <ListItemIcon>
+                      <LoginIcon
+                        style={{ color: "#000", fontSize: "1.5rem" }}
+                      />
+                    </ListItemIcon>
+                    <ListItemText primary="Login" />
+                  </ListItemButton>
+                </ListItem>
+              </NavLink>
+            </>
+          )}
         </List>
       </Drawer>
       <Main open={open}>
@@ -331,22 +352,23 @@ export default function Dashboard() {
           </Main>
         </Container>
       </Main>
-      
+
       <SvgBackground
         viewBox="0 0 1440 320"
         style={{
-          position: 'absolute',
+          position: "absolute",
           bottom: 0,
           left: 0,
-          width: '100%',
-          height: '100%',
+          width: "100%",
+          height: "100%",
           zIndex: -1,
-          transform: 'rotate(360deg)', // Rotate the SVG 180 degrees to flip it upside down
+          transform: "rotate(360deg)", // Rotate the SVG 180 degrees to flip it upside down
         }}
       >
         <path
           opacity="0.14"
-          d="M1439.06 244.889V54.3183C1425.89 47.2518 1412.31 40.9853 1398.39 35.553C1337.73 12.125 1271.56 7.13626 1207.1 9.13176C1142.65 11.1273 1079.72 20.1646 1018.66 40.9638C958.531 61.4561 902.081 91.3118 848.337 124.928C796.531 157.374 743.535 189.725 682.691 201.678C622.673 213.536 563.499 201.678 509.486 173.972C420.878 128.516 354.374 45.4153 258.705 12.7966C205.882 -5.1821 147.821 -2.70692 94.2106 10.8778C66.5998 18.0348 33.9619 29.1827 13.4313 49.8476C8.39558 55.022 3.89564 60.6919 0 66.771L0 244.889H1439.06Z" fill="#0D6EFD"
+          d="M1439.06 244.889V54.3183C1425.89 47.2518 1412.31 40.9853 1398.39 35.553C1337.73 12.125 1271.56 7.13626 1207.1 9.13176C1142.65 11.1273 1079.72 20.1646 1018.66 40.9638C958.531 61.4561 902.081 91.3118 848.337 124.928C796.531 157.374 743.535 189.725 682.691 201.678C622.673 213.536 563.499 201.678 509.486 173.972C420.878 128.516 354.374 45.4153 258.705 12.7966C205.882 -5.1821 147.821 -2.70692 94.2106 10.8778C66.5998 18.0348 33.9619 29.1827 13.4313 49.8476C8.39558 55.022 3.89564 60.6919 0 66.771L0 244.889H1439.06Z"
+          fill="#0D6EFD"
         />
       </SvgBackground>
     </Box>

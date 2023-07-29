@@ -115,11 +115,8 @@ const UserReg = () => {
       })
       .then((res) => {
         alert(res.data.message);
-        const token = res.data.token;
-        // Store the token in local storage or a cookie
-        localStorage.setItem("token", token);
+      
         setIsLoggedIn(true); // Set isLoggedIn to true after successful registration
-        // console.log("Token set:", token);
         setFormData({
           name: "",
           email: "",
