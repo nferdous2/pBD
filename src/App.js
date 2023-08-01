@@ -7,13 +7,14 @@ import Login from './Components/Pages/Authentication/Login';
 import UserReg from './Components/Pages/Authentication/UserReg';
 import RegOptions from './Components/Pages/Authentication/RegOptions';
 import ProfessionalReg from './Components/Pages/Authentication/ProfessionalReg';
-import ProfessionalReg2 from './Components/Pages/Authentication/ProfessionalReg2';
 import ForgetPass from './Components/Pages/Authentication/ForgetPass';
 import SetNewPass from './Components/Pages/Authentication/SetNewPass';
 import Dashboard from './Components/Pages/Dashboard/Dashboard';
 import Profile from './Components/Pages/Dashboard/Profile';
 import Terms from './Components/Pages/HomePages/Terms';
 import { UserProvider } from './Components/Pages/Authentication/UserContext';
+import OTP from './Components/Pages/Authentication/OTP';
+import ProfessionalList from './Components/Pages/Dashboard/ProfessionalList';
 
 
 function App() {
@@ -43,10 +44,7 @@ function App() {
         path: "fpas",
         element:<ForgetPass/>,
       },
-      {
-        path: "proinfo",
-        element:<ProfessionalReg2/>,
-      },
+    
       {
         path: "newpass",
         element:<SetNewPass/>,
@@ -66,6 +64,15 @@ function App() {
       {
         path: "terms",
         element:<Terms/>,
+      },
+      
+      {
+        path: "otp",
+        element:<OTP/>,
+      },
+      {
+        path: "list",
+        element:<ProfessionalList/>,
       },
     ]
 

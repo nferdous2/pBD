@@ -29,6 +29,7 @@ import TreeItem from "@mui/lab/TreeItem";
 import LoginIcon from "@mui/icons-material/Login";
 import Profile from "./Profile";
 import { UserContext } from "../Authentication/UserContext";
+import ProfessionalList from "./ProfessionalList";
 
 const drawerWidth = 240;
 
@@ -105,6 +106,10 @@ export default function Dashboard() {
   const handleProfileClick = () => {
     setSelectedComponent(<Profile />);
   };
+    // Handler to render the Profile component
+    const handlelistClick = () => {
+      setSelectedComponent(<ProfessionalList/>);
+    };
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -242,7 +247,22 @@ export default function Dashboard() {
                   />
                 </ListItemButton>
               </ListItem>
-
+              <ListItem disablePadding>
+                <ListItemButton
+                  style={{ borderRadius: "0 40px 40px 0" }}
+                  onClick={handlelistClick} // Handle click to render Profile dynamically
+                >
+                  <ListItemIcon>
+                    <BsPersonLinesFill
+                      style={{ color: "#000", fontSize: "1.3rem" }}
+                    />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Professional List"
+                    style={{ marginLeft: "-1rem" }}
+                  />
+                </ListItemButton>
+              </ListItem>
               <NavLink
                 to="/settings"
                 style={{ textDecoration: "none", width: "100%", color: "#000" }}
