@@ -44,53 +44,7 @@ const UserReg = () => {
   const handleInputChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
-  //form data submit
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   const { name, email, pass, mobile } = formData;
-  //   if (!name || !email || !pass || !mobile) {
-  //     alert("Please fill in all the required fields.");
-  //     return;
-  //   }
-  //   //password condition
 
-  //   // if (pass.length < 6) {
-  //   //   alert("Password must have at least 6 characters.");
-  //   //   return;
-  //   // }
-
-  //   axios
-  //     .post("http://localhost:80/signup")
-  //     .then((res) => {
-  //       alert(res.data.message);
-
-  //       const token = res.data.token;
-  //       // Store the token in local storage or a cookie
-  //       localStorage.setItem("token", token);
-  //       setIsLoggedIn(true); // Set isLoggedIn to true after successful registration
-  //       // console.log("Token set:", token);
-  //       setFormData({
-  //         name: "",
-  //         email: "",
-  //         mobile: "",
-  //         pass: "",
-  //       });
-  //       window.location.href = "/";
-  //     })
-
-  //     .catch((err) => {
-  //       console.error("Error registering user:", err);
-  //       if (
-  //         err.response &&
-  //         err.response.data &&
-  //         err.response.data.error === "User already exists"
-  //       ) {
-  //         alert("User already exists. Please choose a different email.");
-  //       } else {
-  //         alert("Registration failed. Please try again.");
-  //       }
-  //     });
-  // };
   const handleSubmit = (event) => {
     event.preventDefault();
     const { name, email, pass, mobile } = formData;
