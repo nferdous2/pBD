@@ -138,7 +138,7 @@ const SecondSection = () => {
             }}
           >
             <ArrowBackIosIcon />
-            Sign In
+            1 KM
             <ArrowForwardIosIcon />
           </Button>
 

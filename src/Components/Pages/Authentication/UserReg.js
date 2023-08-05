@@ -13,27 +13,29 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import pic1 from "../../../img/pic1.png";
 import pic3 from "../../../img/pic3.png";
 import { UserContext } from "./UserContext";
 import axios from "axios";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import Cookies from "js-cookie";
 
 const UserReg = () => {
   const logoStyle = {
     width: "80%",
     // height: "50%",
   };
-  const [state] = useState({});
+  const [state, setState] = useState({});
 
-  const { setIsLoggedIn } = useContext(UserContext); // Access the UserContext
-
+  // const { setIsLoggedIn } = useContext(UserContext); // Access the UserContext
+  const navigate = useNavigate();
   //handle password vsisibility
   const handleTogglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
   const [showPassword, setShowPassword] = useState(false);
+  const [registered, setRegistered] = useState(false);
   //form input fields handling
   const [formData, setFormData] = useState({
     name: "",
@@ -44,54 +46,87 @@ const UserReg = () => {
   const handleInputChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const { name, email, pass, mobile } = formData;
+  
+    // Password regex condition
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+  
     if (!name || !email || !pass || !mobile) {
       alert("Please fill in all the required fields.");
       return;
     }
-    // Log the data being sent to the backend
-    console.log("Data sent to backend:", {
-      name: formData.name,
-      mobile: formData.mobile,
-      email: formData.email,
-      pass: formData.pass,
-    });
-
-    axios
-      .post("http://localhost:80/signup", {
+  
+    if (!passwordRegex.test(pass)) {
+      alert(
+        "Password must contain at least one uppercase letter, one lowercase letter, one digit, and be at least 8 characters long."
+      );
+      return;
+    }
+  
+    try {
+      const response = await axios.post('http://sohvm14.saveonhosting.com:4000/signup', {
         name: formData.name,
         mobile: formData.mobile,
         email: formData.email,
         pass: formData.pass,
-      })
-      .then((res) => {
-        alert(res.data.message);
-      
-        setIsLoggedIn(true); // Set isLoggedIn to true after successful registration
+      });
+  
+      if (response.data) {
+        console.log("response", response);
+        setRegistered(true);
+        // console.log("Token cookie:", Cookies.get("token"));
         setFormData({
           name: "",
           email: "",
           mobile: "",
           pass: "",
         });
-        // window.location.href = "/";
-      })
-      .catch((err) => {
-        console.error("Error registering user:", err);
-        if (
-          err.response &&
-          err.response.data &&
-          err.response.data.error === "User already exists"
-        ) {
-          alert("User already exists. Please choose a different email.");
-        } else {
-          alert("Registration failed. Please try again.");
-        }
-      });
+      } else {
+        alert('Registration failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error registering user:', error);
+      alert('Registration failed. Please try again.');
+    }
   };
+  
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+  //   const { name, email, pass, mobile } = formData;
+  //   if (!name || !email || !pass || !mobile) {
+  //     alert("Please fill in all the required fields.");
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await axios.post('http://sohvm14.saveonhosting.com:4000/signup', {
+  //       name: formData.name,
+  //       mobile: formData.mobile,
+  //       email: formData.email,
+  //       pass: formData.pass,
+  //     });
+
+  //     if (response.data) {
+  //       console.log("response", response)
+  //       setRegistered(true);
+  //       // console.log("Token cookie:", Cookies.get("token"));
+  //       setFormData({
+  //         name: "",
+  //         email: "",
+  //         mobile: "",
+  //         pass: "",
+  //       });
+
+  //     } else {
+  //       alert('Registration failed. Please try again.');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error registering user:', error);
+  //     alert('Registration failed. Please try again.');
+  //   }
+  // };
 
   const { gilad } = state;
   return (
@@ -237,56 +272,7 @@ const UserReg = () => {
                             ),
                           }}
                         />
-                        {/* <TextField
-                id="outlined"
-                label="Your password"
-                name="password"
-                value={formData.pass}
-                onChange={handleInputChange}
-                variant="standard"
-                required
-              
-                type={showPassword ? "text" : "password"}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={handleTogglePasswordVisibility}
-                        edge="end"
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              /> */}
-                        {/* <TextField
-                          id="password"
-                          label="Your password"
-                          name="password"
-                          value={formData.pass}
-                          onChange={handleInputChange}
-                          variant="outlined"
-                          required
-                          fullWidth
-                          type={showPassword ? "text" : "password"}
-                          InputProps={{
-                            endAdornment: (
-                              <InputAdornment position="end">
-                                <IconButton
-                                  onClick={handleTogglePasswordVisibility}
-                                  edge="end"
-                                >
-                                  {showPassword ? (
-                                    <VisibilityOff />
-                                  ) : (
-                                    <Visibility />
-                                  )}
-                                </IconButton>
-                              </InputAdornment>
-                            ),
-                          }}
-                        /> */}
+
                       </Grid>
                     </Grid>
                     <Box sx={{ display: "flex" }}>
@@ -330,6 +316,8 @@ const UserReg = () => {
                       Sign Up
                     </Button>
                   </form>
+                  {registered && navigate("/otp")}
+                  
                   <Typography variant="body2" align="center" gutterBottom>
                     Already have an account? <Link to="/login">Log In</Link>
                   </Typography>

@@ -1,3 +1,4 @@
+
 import React, { useContext, useEffect, useState } from 'react';
 import {
   Card,
@@ -8,6 +9,7 @@ import {
 } from '@mui/material';
 import axios from 'axios'; // Import Axios for making HTTP requests
 import { UserContext } from '../Authentication/UserContext';
+import Cookies from 'js-cookie';
 
 const cardStyles = {
   maxWidth: 400,
@@ -31,22 +33,31 @@ const buttonStyles = {
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
-  const { isLoggedIn,  } = useContext(UserContext);
+  
+  const { isLoggedIn } = useContext(UserContext);
   useEffect(() => {
     const fetchUser = async () => {
       if (isLoggedIn) {
         try {
-          const response = await axios.get("http://localhost:80/loadprofile");
+          // Send the authentication token with the request
+          const token = localStorage.getItem('cookie') // Replace "token" with the actual key of the token in the response
+localStorage.setItem("cookie", token);
+          const response = await axios.get("http://sohvm14.saveonhosting.com:4000/api/loadprofile", {
+           headers:{
+            "Authorization":`${token}`,
+           }
+            // withCredentials: true
+          });
+          console.log(response.data)
           setUserData(response.data);
         } catch (error) {
           console.error("Error fetching user data:", error);
         }
       }
     };
-  
+
     fetchUser();
   }, [isLoggedIn]);
-  
 
   return (
     <div>
@@ -71,25 +82,65 @@ const Profile = () => {
       </svg>
 
       <Card style={cardStyles}>
-        <CardMedia
-          style={mediaStyles}
-          // image={userData?.photo} // Uncomment and provide the user's photo URL if available
-          title="User Photo"
-        />
+
         <CardContent style={contentStyles}>
           {userData ? (
             <>
               <Typography variant="h5" gutterBottom>
                 {userData.name}
               </Typography>
-              <Typography variant="body1" color="textSecondary">
-                Email: {userData.email}
-              </Typography>
-              <Typography variant="body1" color="textSecondary">
-                Phone Number: {userData.phoneNumber}
-              </Typography>
+              {userData.email && (
+                <Typography variant="body1" color="textSecondary">
+                  <span style={{ fontWeight: "bold" }}>Email:</span> {userData.email}
+                </Typography>
+              )}
+              {userData.mobile && (
+                <Typography variant="body1" color="textSecondary">
+                  <span style={{ fontWeight: "bold" }}>Phone Number:</span> {userData.mobile}
+                </Typography>
+              )}
+          
+              {userData.gender && (
+                <Typography variant="body1" color="textSecondary">
+                  <span style={{ fontWeight: "bold" }}>Gender:</span> {userData.gender}
+                </Typography>
+              )}
+              {userData.country && (
+                <Typography variant="body1" color="textSecondary">
+                  <span style={{ fontWeight: "bold" }}>Country:</span> {userData.country}
+                </Typography>
+              )}
+              {userData.district && (
+                <Typography variant="body1" color="textSecondary">
+                  <span style={{ fontWeight: "bold" }}>District:</span> {userData.district}
+                </Typography>
+              )}
+              {userData.zip && (
+                <Typography variant="body1" color="textSecondary">
+                  <span style={{ fontWeight: "bold" }}>ZIP Code:</span> {userData.zip}
+                </Typography>
+              )}
+              {userData.category && (
+                <Typography variant="body1" color="textSecondary">
+                  <span style={{ fontWeight: "bold" }}>Category:</span> {userData.category}
+                </Typography>
+              )}
+              {userData.subcategory && (
+                <Typography variant="body1" color="textSecondary">
+                  <span style={{ fontWeight: "bold" }}>Subcategory:</span>{userData.subcategory}
+                </Typography>
+              )}
+              {userData.education && (
+                <Typography variant="body1" color="textSecondary">
+                  <span style={{ fontWeight: "bold" }}>Education:</span>{userData.education}
+                </Typography>
+              )}
+
+             
+           
+
               {/* Add other user data as needed */}
-              <Button
+              {/* <Button
                 variant="contained"
                 color="primary"
                 style={buttonStyles}
@@ -98,7 +149,7 @@ const Profile = () => {
                 }}
               >
                 Update
-              </Button>
+              </Button> */}
             </>
           ) : (
             <Typography variant="body1">Loading user data...</Typography>

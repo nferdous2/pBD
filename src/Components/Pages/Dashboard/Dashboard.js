@@ -263,43 +263,7 @@ export default function Dashboard() {
                   />
                 </ListItemButton>
               </ListItem>
-              <NavLink
-                to="/settings"
-                style={{ textDecoration: "none", width: "100%", color: "#000" }}
-              >
-                <ListItem disablePadding>
-                  <ListItemButton style={{ borderRadius: "0 40px 40px 0" }}>
-                    <ListItemIcon>
-                      <GrUserSettings
-                        style={{ color: "#000", fontSize: "1.4rem" }}
-                      />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Settings"
-                      style={{ marginLeft: "-1rem" }}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              </NavLink>
-
-              <NavLink
-                to="/bookmarks"
-                style={{ textDecoration: "none", width: "100%", color: "#000" }}
-              >
-                <ListItem disablePadding>
-                  <ListItemButton style={{ borderRadius: "0 40px 40px 0" }}>
-                    <ListItemIcon>
-                      <BsBookmarkDash
-                        style={{ color: "#000", fontSize: "1.4rem" }}
-                      />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Bookmark"
-                      style={{ marginLeft: "-1rem" }}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              </NavLink>
+           
               <NavLink
                 to="/msg"
                 style={{ textDecoration: "none", width: "100%", color: "#000" }}

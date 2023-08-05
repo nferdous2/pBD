@@ -1,67 +1,109 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import {
   Box,
   Button,
   CardContent,
   Container,
   Grid,
+  IconButton,
+  InputAdornment,
   MenuItem,
   TextField,
   Typography,
 } from "@mui/material";
 import pic1 from "../../../img/pic1.png";
 import pic3 from "../../../img/pic3.png";
-import { Link } from "react-router-dom";
-
-const FileUpload = ({ label, value, onChange, accept }) => {
-  const inputId = `${label}-input`;
-
-  return (
-    <Grid
-      item
-      xs={12}
-      sx={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}
-    >
-      <TextField
-        variant="outlined"
-        sx={{ width: "100%", color: "black" }}
-        value={value ? value.name : ""}
-        disabled
-      />
-      <input
-        accept={accept}
-        id={inputId} // Add the id attribute
-        type="file"
-        onChange={onChange}
-        style={{ display: "none" }}
-        required
-      />
-      <Button
-        component="span"
-        onClick={() => document.getElementById(inputId).click()} // Use the inputId to trigger click
-        sx={{
-          width: "80%",
-          ml: "10%",
-          background: "#1F51FF",
-          color: "white",
-          fontWeight: "bold",
-        }}
-      >
-        {label}
-      </Button>
-    </Grid>
-  );
-};
+import { UserContext } from "./UserContext";
+import axios from "axios";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Link, Navigate } from "react-router-dom";
 
 const ProfessionalReg = () => {
-  const logoStyle = {
-    // width: "50%",
-    // height: "50%",
+  // const { setIsLoggedIn } = useContext(Use/rContext);
+  const logoStyle = {};
+  const [registered, setRegistered] = useState(false);
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    pass: "",
+    category: "",
+    subcategory: "",
+    education: "",
+    gender: "",
+    country: "",
+    district: "",
+    zip: "",
+  });
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   };
+
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
+  const [showPassword, setShowPassword] = useState(false);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const { name, email, pass, mobile, category, subcategory, education, gender, country, district, zip } = formData;
+    if (!name || !email || !pass || !mobile || !category || !subcategory || !education || !gender || !country || !district || !zip) {
+      alert("Please fill in all the required fields.");
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://sohvm14.saveonhosting.com:4000/signup', {
+        name: formData.name,
+        mobile: formData.mobile,
+        email: formData.email,
+        pass: formData.pass,
+        category: formData.category,
+        subcategory: formData.subcategory,
+        education: formData.education,
+        gender: formData.gender,
+        country: formData.country,
+        district: formData.district,
+        zip: formData.zip,
+
+      });
+
+      if (response.data) {
+        console.log("response", response)
+
+        setRegistered(true);
+        // console.log("Token cookie:", Cookies.get("token"));
+        setFormData({
+          name: "",
+          email: "",
+          mobile: "",
+          pass: "",
+          category: "",
+          subcategory: "",
+          education: "",
+          gender: "",
+          country: "",
+          district: "",
+          zip: "",
+        });
+        // window.location.href = '/otp';
+
+      } else {
+        alert('Registration failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error registering user:', error);
+      alert('Registration failed. Please try again.');
+    }
+  };
+
+
   return (
     <Box
       sx={{
@@ -69,7 +111,7 @@ const ProfessionalReg = () => {
         mt: 5,
         textAlign: "center",
         fontFamily: "SF UI Display",
-        position: "relative", // Ensure the parent container has position set to relative
+        position: "relative",
       }}
     >
       <svg
@@ -82,7 +124,7 @@ const ProfessionalReg = () => {
           width: "100%",
           height: "100%",
           zIndex: -1,
-          transform: "rotate(360deg)", // Rotate the SVG 180 degrees to flip it upside down
+          transform: "rotate(360deg)",
         }}
       >
         <path
@@ -91,25 +133,12 @@ const ProfessionalReg = () => {
           fill="#0D6EFD"
         />
       </svg>
-      {/* 1st section  */}
-      <Grid
-        container
-        spacing={{ xs: 2, md: 3 }}
-        justifyContent="center"
-        alignItems="center"
-        sx={{ mb: 5 }}
-      >
+      <Grid container spacing={{ xs: 2, md: 3 }} justifyContent="center" alignItems="center" sx={{ mb: 5 }}>
         <Grid item xs={12} md={2} sx={{ mt: 5 }}>
           <img src={pic1} alt="Logo" style={logoStyle} />
         </Grid>
         <Grid item xs={12} md={6}>
-          <Container
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+          <Container sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             <Box>
               <CardContent>
                 <Grid container spacing={2}>
@@ -123,80 +152,223 @@ const ProfessionalReg = () => {
                       Please enter your professional information
                     </Typography>
                   </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      fullWidth
-                      id="category"
-                      label="Category"
-                      required
-                    >
-                      <MenuItem value="">--- Select Category ---</MenuItem>
-                      <MenuItem value="category1">Electrician</MenuItem>
-                      <MenuItem value="category2">Plumber</MenuItem>
-                      <MenuItem value="category3">Carpenter</MenuItem>
-                    </TextField>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      fullWidth
-                      id="subcategory"
-                      label="Subcategory"
-                      required
-                    >
-                      <MenuItem value="">--- Select Subcategory ---</MenuItem>
-                      <MenuItem value="subcategory1">Hair Saloon</MenuItem>
-                      <MenuItem value="subcategory2">Car</MenuItem>
-                      <MenuItem value="subcategory3">Computer</MenuItem>
-                    </TextField>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      fullWidth
-                      id="education"
-                      label="Latest Education"
-                      required
-                    >
-                      <MenuItem value="">--- Select Education ---</MenuItem>
-                      <MenuItem value="education1">PEC and Equivalent</MenuItem>
-                      <MenuItem value="education2">JSC and Equivalent</MenuItem>
-                      <MenuItem value="education3">SSC and Equivalent</MenuItem>
-                      <MenuItem value="education4">HSC and Equivalent</MenuItem>
-                      <MenuItem value="education5">Undergraduate</MenuItem>
-                      <MenuItem value="education6">Graduate</MenuItem>
-                    </TextField>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <FileUpload
-                      label="Upload NID(pdf)"
-                      // value={cv}
-                      // onChange={handleCVChange}
-                      accept="application/pdf"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <FileUpload
-                      label="Upload Certificate (PDF)"
-                      // value={pdf}
-                      // onChange={handlePdfChange}
-                      accept="application/pdf"
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Link to="/proinfo">
-                      <Button
-                        sx={{ width: "50%" }}
-                        variant="contained"
-                        type="submit"
-                        // onClick={handleSubmit}
-                      >
-                        Next
-                      </Button>
-                    </Link>
-                  </Grid>
+                  <form onSubmit={handleSubmit}>
+                    <Grid container spacing={2}>
+
+                      <Grid item xs={12}>
+                        <TextField
+                          label="First Name"
+                          variant="outlined"
+                          margin="normal"
+                          required
+                          fullWidth
+                          id="name-input"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleInputChange}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          label="Email"
+                          type="email"
+                          variant="outlined"
+                          margin="normal"
+                          required
+                          fullWidth
+                          id="email-input"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          label="Mobile Number"
+                          type="tel"
+                          variant="outlined"
+                          margin="normal"
+                          required
+                          fullWidth
+                          id="phone-input"
+                          name="mobile"
+                          value={formData.mobile}
+                          onChange={handleInputChange}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          id="standard-basic"
+                          label="Your password"
+                          name="pass"
+                          value={formData.pass}
+                          onChange={handleInputChange}
+                          variant="outlined"
+                          fullWidth
+                          required
+                          type={showPassword ? "text" : "password"}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton
+                                  onClick={handleTogglePasswordVisibility}
+                                  edge="end"
+                                >
+                                  {showPassword ? (
+                                    <VisibilityOff />
+                                  ) : (
+                                    <Visibility />
+                                  )}
+                                </IconButton>
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <TextField
+                          fullWidth
+                          id="category"
+                          label="Category"
+                          required
+                          select
+                          name="category"
+
+                          value={formData.category}
+                          onChange={handleInputChange}
+                        >
+                          <MenuItem value="">--- Select Category ---</MenuItem>
+                          <MenuItem value="Electrician">Electrician</MenuItem>
+                          <MenuItem value="Plumber">Plumber</MenuItem>
+                          <MenuItem value="Carpenter">Carpenter</MenuItem>
+
+                        </TextField>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <TextField
+                          fullWidth
+                          id="subcategory"
+                          label="Subcategory"
+                          required
+                          name="subcategory"
+                          select
+                          value={formData.subcategory}
+                          onChange={handleInputChange}
+                        >
+                          <MenuItem value="">--- Select Subcategory ---</MenuItem>
+                          <MenuItem value="Hair Saloon">Hair Saloon</MenuItem>
+                          <MenuItem value="Car">Car</MenuItem>
+                          <MenuItem value="Computer">Computer</MenuItem>
+
+                        </TextField>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <TextField
+                          fullWidth
+                          id="education"
+                          label="Latest Education"
+                          required
+                          select
+                          name="education"
+
+                          value={formData.education}
+                          onChange={handleInputChange}
+                        >
+                          <MenuItem value="">--- Select Education ---</MenuItem>
+                          <MenuItem value="PEC and Equivalent">PEC and Equivalent</MenuItem>
+                          <MenuItem value="JSC and Equivalent">JSC and Equivalent</MenuItem>
+                          <MenuItem value="SSC and Equivalent">SSC and Equivalent</MenuItem>
+                          <MenuItem value="HSC and Equivalent">HSC and Equivalent</MenuItem>
+                          <MenuItem value="Undergraduate">Undergraduate</MenuItem>
+                          <MenuItem value="Graduate">Graduate</MenuItem>
+
+                        </TextField>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <TextField
+                          fullWidth
+                          id="gender"
+                          name="gender"
+                          label="Gender"
+                          required
+                          value={formData.gender}
+                          select
+                          onChange={handleInputChange}
+                        >
+                          <MenuItem value="">--- Select Gender ---</MenuItem>
+                          <MenuItem value="male">Male</MenuItem>
+                          <MenuItem value="female">Female</MenuItem>
+                          <MenuItem value="other">Other</MenuItem>
+                        </TextField>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <TextField
+                          fullWidth
+                          id="country"
+                          name="country"
+                          label="Country"
+                          select
+                          required
+                          value={formData.country}
+
+                          onChange={handleInputChange}
+                        >
+                          <MenuItem value="">--- Select Country ---</MenuItem>
+                          <MenuItem value="Afghanistan">Afghanistan</MenuItem>
+                          <MenuItem value="Albania">Albania</MenuItem>
+                          <MenuItem value="Algeria">Algeria</MenuItem>
+                        </TextField>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <TextField
+                          fullWidth
+                          id="district"
+                          label="District"
+                          required
+                          name="district"
+                          value={formData.district}
+                          onChange={handleInputChange}
+                        />
+                      </Grid>
+
+                      <Grid item xs={6}>
+                        <TextField
+                          fullWidth
+                          id="zip"
+                          label="Zip Code"
+                          required
+                          name="zip"
+                          value={formData.zip}
+                          onChange={handleInputChange}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          type="submit"
+                          fullWidth
+                        >
+                          Sign Up
+                        </Button>
+                      </Grid></Grid>
+                  </form>
+
                 </Grid>
+
               </CardContent>
+              <Link to="/otp" sx={{ mt: 5 }}>
+                <Button
+                sx={{ width: "100%", background: "#F6FAFD" }}
+                  fullWidth
+                >
+                  Now Click Here to Verify Your OTP
+                </Button>
+              </Link>
             </Box>
+
           </Container>
+
         </Grid>
         <Grid item xs={12} md={2} sx={{ marginTop: "9%" }}>
           <img src={pic3} alt="Logo" style={logoStyle} />

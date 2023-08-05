@@ -18,45 +18,22 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Login = () => {
   const logoStyle = {
-    // width: "136.2px",
-    // height/: "191.27px",
-  };
-  const styles = {
-    box1: {
-      borderRadius: "8.158px",
-      border: "2px solid #0D6EFD",
-      width: "170.449px",
-      height: "170.297px",
-      padding: "9.178px 50.477px",
-      background: "#0D6EFD",
-      color: "#FFF",
-    },
-    box2: {
-      borderRadius: "8.158px",
-      border: "2px solid #0D6EFD",
-      background: "#FFF",
-      width: "170.449px",
-      height: "170.297px",
-      padding: "9.178px 50.477px",
-      color: "#0D6EFD",
-    },
+
   };
 
   const img = {
-    // width: "150%",
-    // height: "100%",
+ 
   };
 
-  const { setIsLoggedIn } = useContext(UserContext); // Access the UserContext
+  const { setIsLoggedIn,setUserId } = useContext(UserContext); // Access the UserContext
   //HANDELING PASSWORD VISIBILITY
   const handleTogglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
   const [showPassword, setShowPassword] = useState(false);
-
   //FORM DATA HANDLE
   const [formData, setFormData] = useState({
-    email: "",
+    user: "",
     password: "",
   });
 
@@ -64,28 +41,37 @@ const Login = () => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+ 
 
-    axios
-      .post("http://localhost:80/login", formData)
-      .then((res) => {
-        alert(res.data.message);
-     
+    try {
+      const response = await axios.post("http://sohvm14.saveonhosting.com:4000/login", {
+        user: formData.user,
+        pass: formData.pass,
+      });
+console.log("response",response)
+      if (response.data) {
+        const userId = response.data;
+        console.log("response",response)
+        localStorage.setItem("cookie", response.data.cookie);
+        console.log("cookie",response.data.cookie);
         setIsLoggedIn(true);
+        setUserId(userId)
+        console.log("userId",userId)
+        setFormData({ user: "", pass: "" });
+      
         // window.location.href = "/";
 
-        setFormData({
-          email: "",
-          pass: "",
-        });
-      })
-      .catch((err) => {
-        console.error("Error logging in:", err);
-        alert("Login failed. Please check your credentials and try again.");
-      });
+      } else {
+        alert("Login failed. Please check your username or password.");
+      }
+    } catch (error) {
+      console.error('Error registering user:', error);
+      alert('Registration failed. Please try again.');
+    }
   };
-
+ 
   return (
     <div>
       <svg
@@ -165,9 +151,9 @@ const Login = () => {
               <TextField
                 sx={{ width: "100%", mb: 1 }}
                 id="standard-basic-1"
-                label="Your mail"
-                name="email"
-                value={formData.email}
+                label="User"
+                name="user"
+                value={formData.user}
                 onChange={handleInputChange}
                 variant="outlined"
                 required
@@ -195,11 +181,6 @@ const Login = () => {
                   ),
                 }}
               />
-              <NavLink to="/pass">
-                <Button sx={{ width: "100%", background: "#F6FAFD" }}>
-                  Forgot Password?{" "}
-                </Button>
-              </NavLink>
               <Button
                 sx={{ width: "100%", mb: 1 }}
                 variant="contained"
@@ -208,7 +189,7 @@ const Login = () => {
                 Login
               </Button>
 
-              <NavLink to="/register">
+              <NavLink to="/userreg">
                 <Button sx={{ width: "100%", background: "#F6FAFD" }}>
                   For the First time? Go to register
                 </Button>
