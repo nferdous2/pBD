@@ -125,7 +125,7 @@ const OTPVerification = () => {
           <Grid item xs={12} md={4}>
             <form onSubmit={handleVerification}>
               <TextField
-                label="Email"
+                label="user"
                 type="email"
                 value={mail}
                 onChange={(e) => setMail(e.target.value)}
